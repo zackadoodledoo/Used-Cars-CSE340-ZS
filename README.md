@@ -3,7 +3,7 @@ Option B - Used Car Dealership. Details and Requirements: Option B: Build a Used
 
 Links:
 
-Github: [....]
+Github: [(https://github.com/zackadoodledoo/Used-Cars-CSE340-ZS)]
 
 
 Render: [.....]
