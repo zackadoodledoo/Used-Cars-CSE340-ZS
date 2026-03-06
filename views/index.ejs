@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Used Cars Dealership</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <% include ./partials/nav %>
+
+  <main style="max-width:900px;margin:24px auto;padding:0 16px;">
+    <h1>Used Cars Dealership</h1>
+
+    <% if (flash && flash.error && flash.error.length) { %>
+      <div style="background:#ffe6e6;color:#900;padding:8px;border-radius:4px;margin-bottom:12px;">
+        <%= flash.error.join(' | ') %>
+      </div>
+    <% } %>
+
+    <section>
+      <h2>Featured Vehicles</h2>
+
+      <% if (Array.isArray(featured) && featured.length) { %>
+        <ul style="list-style:none;padding:0;">
+          <% featured.forEach(function(v){ %>
+            <li style="border:1px solid #ddd;padding:8px;margin-bottom:8px;">
+              <a href="/vehicles/<%= v.id %>">
+                <strong><%= v.make %> <%= v.model %></strong>
+                <span style="color:#666"> — <%= v.year %></span>
+                <div style="color:#0b3d91;font-weight:600;">$<%= Number(v.price).toFixed(2) %></div>
+              </a>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p>No featured vehicles yet. Check back later or add inventory from the owner dashboard.</p>
+      <% } %>
+    </section>
+  </main>
+
+  <footer style="text-align:center;padding:16px 0;color:#666;">
+    &copy; <%= new Date().getFullYear() %> Used Cars Dealership
+  </footer>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<nav style="background:#0b3d91;color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;">
+  <div>
+    <a href="/" style="color:#fff;text-decoration:none;font-weight:700;margin-right:12px;">Used Cars</a>
+    <a href="/categories/trucks" style="color:#fff;text-decoration:none;margin-right:8px;">Trucks</a>
+    <a href="/categories/cars" style="color:#fff;text-decoration:none;margin-right:8px;">Cars</a>
+    <a href="/categories/vans" style="color:#fff;text-decoration:none;margin-right:8px;">Vans</a>
+    <a href="/categories/suvs" style="color:#fff;text-decoration:none;">SUVs</a>
+  </div>
+
+  <div>
+    <% if (!currentUser) { %>
+      <a href="/login" style="color:#fff;text-decoration:none;margin-right:8px;">Login</a>
+      <a href="/register" style="color:#fff;text-decoration:none;margin-right:8px;">Register</a>
+      <a href="/contact" style="color:#fff;text-decoration:none;">Contact</a>
+    <% } else { %>
+      <% if (currentUser.role === 'customer') { %>
+        <a href="/account" style="color:#fff;text-decoration:none;margin-right:8px;">My Account</a>
+      <% } %>
+
+      <% if (currentUser.role === 'employee' || currentUser.role === 'owner') { %>
+        <a href="/employee" style="color:#fff;text-decoration:none;margin-right:8px;">Employee</a>
+      <% } %>
+
+      <% if (currentUser.role === 'owner') { %>
+        <a href="/owner" style="color:#fff;text-decoration:none;margin-right:8px;">Owner</a>
+      <% } %>
+
+      <form action="/logout" method="post" style="display:inline;margin:0;">
+        <button type="submit" style="background:none;border:none;color:#fff;cursor:pointer;text-decoration:underline;padding:0;margin-right:8px;">Logout</button>
+      </form>
+      <span style="margin-left:6px;color:#fff;">Signed in as <strong><%= currentUser.name %></strong></span>
+    <% } %>
+  </div>
+</nav>
