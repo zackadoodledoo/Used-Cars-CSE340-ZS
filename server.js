@@ -21,6 +21,13 @@ try {
 }
 
 const app = express();
+
+// Define a route handler for the root URL ('/')
+app.get('/', (req, res) => {
+    res.send('Hello, World!');
+});
+
+
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
