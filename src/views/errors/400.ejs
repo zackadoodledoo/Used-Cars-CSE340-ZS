@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bad Request</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <%- include('../partials/header', { user: currentUser }) %>
+
+  <main>
+    <h2>Bad request</h2>
+    <p>Your request could not be processed. Check the URL or input and try again.</p>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>
