@@ -52,7 +52,12 @@ const sessionOptions = {
 };
 
 if (db && db.pool) {
-  app.use(session({ store: new PgSession({ pool: db.pool }), ...sessionOptions }));
+  try {
+    app.use(session({ store: new PgSession({ pool: db.pool }), ...sessionOptions }));
+  } catch (err) {
+    console.warn('Failed to initialize PgSession, falling back to memory store:', err.message);
+    app.use(session(sessionOptions));
+  }
 } else {
   app.use(session(sessionOptions));
 }
@@ -118,6 +123,16 @@ app.get('/dashboard', requireAuth, (req, res) => {
   return res.redirect('/my');
 });
 
+/**
+ * Catch-all route for 404 errors
+ * This must come after all real routes so it only runs when no route matched.
+ */
+app.use((req, res, next) => {
+  const err = new Error('Page Not Found');
+  err.status = 404;
+  next(err);
+});
+
 // global error handler (place near the end of server.js)
 app.use((err, req, res, next) => {
   console.error(err);
@@ -133,13 +148,17 @@ app.use((err, req, res, next) => {
   res.render('errors/500', viewData, (renderErr, html) => {
     if (renderErr) {
       // rendering failed (missing view or template error) — send a safe fallback
+      // If it's a 404, prefer a simple 404 text response
+      if (err.status === 404) {
+        res.type('text').send('404 Not Found');
+        return;
+      }
       res.type('text').send('Internal Server Error');
       return;
     }
     res.send(html);
   });
 });
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server listening on http://localhost:${PORT}`));
