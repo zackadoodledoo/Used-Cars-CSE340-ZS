@@ -118,13 +118,28 @@ app.get('/dashboard', requireAuth, (req, res) => {
   return res.redirect('/my');
 });
 
-/**
- * Global error handler (simple)
- */
+// global error handler (place near the end of server.js)
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(500).render('errors/500', { error: err });
+
+  // expose minimal info to views
+  const viewData = {
+    error: err,
+    currentUser: req.session?.user ?? null
+  };
+
+  // try to render a friendly error page; fallback to plain text if render fails
+  res.status(err.status || 500);
+  res.render('errors/500', viewData, (renderErr, html) => {
+    if (renderErr) {
+      // rendering failed (missing view or template error) — send a safe fallback
+      res.type('text').send('Internal Server Error');
+      return;
+    }
+    res.send(html);
+  });
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server listening on http://localhost:${PORT}`));
