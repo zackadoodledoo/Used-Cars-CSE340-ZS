@@ -6,11 +6,16 @@ import connectPgSimple from 'connect-pg-simple';
 import flash from 'connect-flash';
 import { fileURLToPath } from 'url';
 
+import vehiclesRouter from './src/routes/vehicles.js';
+import authRouter from './src/routes/auth.js';
+import { requireAuth } from './src/middleware/auth.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PgSession = connectPgSimple(session);
 
+// Try to load DB module (optional). Expect default export with { pool }.
 let db;
 try {
   const mod = await import('./db/index.js');
@@ -22,21 +27,28 @@ try {
 
 const app = express();
 
-// Define a route handler for the root URL ('/')
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
-
-
+/**
+ * View engine and middleware (order matters)
+ */
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'src', 'views'));
+
+// Parse urlencoded bodies (forms)
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from public (single call)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Session configuration
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || 'dev-secret',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: process.env.NODE_ENV === 'production' }
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production'
+  }
 };
 
 if (db && db.pool) {
@@ -45,8 +57,10 @@ if (db && db.pool) {
   app.use(session(sessionOptions));
 }
 
+// Flash (requires sessions)
 app.use(flash());
 
+// Expose current user and flash messages to views
 app.use((req, res, next) => {
   res.locals.currentUser = req.session?.user ?? null;
   res.locals.flash = {
@@ -56,10 +70,61 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
-  res.render('index', { featured: [] });
+/**
+ * Mount routers (after session and body parsing)
+ */
+app.use('/', authRouter);
+app.use('/vehicles', vehiclesRouter);
+
+/**
+ * Root route: render home with featured vehicles and categories if DB available
+ */
+app.get('/', async (req, res, next) => {
+  try {
+    if (db && db.pool) {
+      const featuredQ = `
+        SELECT v.id, v.title, v.make, v.model, v.year, v.price,
+               (SELECT url FROM vehicle_images vi WHERE vi.vehicle_id = v.id LIMIT 1) AS image_url
+        FROM vehicles v
+        WHERE v.available = true
+        ORDER BY v.created_at DESC
+        LIMIT 6
+      `;
+      const [featuredRes, categoriesRes] = await Promise.all([
+        db.pool.query(featuredQ),
+        db.pool.query('SELECT id, name FROM categories ORDER BY name')
+      ]);
+      return res.render('home', {
+        user: req.session.user || null,
+        featuredVehicles: featuredRes.rows,
+        categories: categoriesRes.rows
+      });
+    }
+
+    // Fallback when DB not available
+    return res.render('home', { user: req.session.user || null, featuredVehicles: [], categories: [] });
+  } catch (err) {
+    next(err);
+  }
 });
 
+/**
+ * Example protected dashboard route
+ */
+app.get('/dashboard', requireAuth, (req, res) => {
+  const role = req.session.user?.role;
+  if (role === 'owner') return res.redirect('/owner');
+  if (role === 'employee') return res.redirect('/employee');
+  return res.redirect('/my');
+});
+
+/**
+ * Global error handler (simple)
+ */
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).render('errors/500', { error: err });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server listening on http://localhost:${PORT}`));

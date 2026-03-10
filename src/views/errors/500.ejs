@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Server Error</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <%- include('../partials/header', { user: currentUser }) %>
+
+  <main>
+    <h2>Something went wrong</h2>
+    <p>We encountered an internal server error. Please try again later.</p>
+    <% if (error && process.env.NODE_ENV !== 'production') { %>
+      <pre style="white-space:pre-wrap;color:#900;"><%= error.stack %></pre>
+    <% } %>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

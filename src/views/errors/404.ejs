@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Not Found</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <%- include('../partials/header', { user: currentUser }) %>
+
+  <main>
+    <h2>Page not found</h2>
+    <p>The page you requested could not be found.</p>
+    <p><a href="/">Return home</a></p>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

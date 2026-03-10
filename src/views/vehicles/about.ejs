@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About — Used Car Dealership</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <%- include('partials/header', { user: user }) %>
+
+  <main>
+    <section>
+      <h2>About This Project</h2>
+      <p>
+        This web application is a course project for CSE 340 that models a small used car
+        dealership. It demonstrates server-side rendering with Express and EJS, session-based
+        authentication, role-based authorization, a PostgreSQL-backed data model, and a
+        multi-stage service request workflow.
+      </p>
+    </section>
+
+    <section>
+      <h2>Who We Are</h2>
+      <p>
+        <strong>Owner</strong>: Owner One — manages inventory, categories, and employee accounts.<br />
+        <strong>Employees</strong>: Manage vehicle details, moderate reviews, and handle service requests.<br />
+        <strong>Customers</strong>: Browse vehicles, leave reviews, and submit service requests for their vehicles.
+      </p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>Use the <a href="/contact">contact form</a> to send us a message. Contact submissions are saved to the database and visible to employees in the dashboard.</p>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vehicles — Browse</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <%- include('../partials/header', { user: user }) %>
+
+  <main>
+    <section>
+      <h2>Browse Vehicles by Category</h2>
+
+      <div class="categories" style="margin-bottom:1rem;">
+        <a href="/vehicles?category=Trucks">Trucks</a> |
+        <a href="/vehicles?category=Vans">Vans</a> |
+        <a href="/vehicles?category=Cars">Cars</a> |
+        <a href="/vehicles?category=SUVs">SUVs</a>
+      </div>
+
+      <p>This page is a placeholder. The real vehicle list is rendered server-side at <code>/vehicles</code>.</p>
+
+      <h3>Sample Vehicles </h3>
+      <ul style="list-style:none;padding:0;">
+        <li style="border:1px solid #ddd;padding:12px;margin-bottom:12px;">
+          <h4>2016 Toyota Camry</h4>
+          <p><strong>Price:</strong> $12,500 &nbsp; <strong>Miles:</strong> 78,000</p>
+          <a href="/vehicles/1">View details</a>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

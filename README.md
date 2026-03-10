@@ -84,3 +84,10 @@ project. If you approach it with curiosity and a desire to learn rather than jus
 boxes, you will not only pass easily but also build something meaningful that showcases
 your abilities. The best projects come from students who genuinely engage with the
 material and enjoy the process of building.
+
+
+****Notes***
+// Start the server in production; this will not work locally
+pnpm run start
+// Start the server in development
+pnpm run dev

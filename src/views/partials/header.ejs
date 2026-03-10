@@ -1,0 +1,25 @@
+<header>
+  <h1><a href="/" style="text-decoration:none;color:inherit;">Used Car Dealership</a></h1>
+
+  <nav>
+    <ul style="list-style:none;padding:0;margin:0;display:flex;gap:12px;align-items:center;">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/vehicles">Vehicles</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div style="margin-top:8px;">
+    <% if (user) { %>
+      <span>Welcome, <%= user.name %> (<%= user.role %>)</span>
+      <form method="post" action="/logout" style="display:inline;margin-left:8px;">
+        <button type="submit">Logout</button>
+      </form>
+    <% } else { %>
+      <a href="/login">Login</a> | <a href="/register">Register</a>
+    <% } %>
+  </div>
+
+  <hr />
+</header>

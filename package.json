@@ -2,10 +2,10 @@
   "name": "used-cars-cse340-zs",
   "version": "1.0.0",
   "description": "Option B - Used Car Dealership. Details and Requirements: Option B: Build a Used Car Dealership If you prefer clear requirements, build a used car dealership website with these features: Public Pages: • Home page with featured vehicles • Browse vehicles, etc.....  link:[https://byui.instructure.com/courses/403274/assignments/16216857 ]",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,6 +28,7 @@
     "ejs": "^5.0.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
+    "express-validator": "^7.3.1",
     "pg": "^8.20.0"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
-    <footer>
-        <p>&copy; <%= currentYear %> My Express App.</p>
-    </footer>
-</body>
-</html>
+<hr />
+<footer style="margin-top:1rem;">
+  <p>&copy; <span id="year"></span> Used Car Dealership</p>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</footer>
